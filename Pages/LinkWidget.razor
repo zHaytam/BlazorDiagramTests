@@ -1,0 +1,23 @@
+﻿@{ System.Diagnostics.Debug.WriteLine("[LinkWidget] Rendered"); }
+
+<g>
+    <line x1="@Link.FromPort.Position.left"
+          y1="@Link.FromPort.Position.top"
+          x2="@Link.ToPort.Position.left"
+          y2="@Link.ToPort.Position.top"
+          stroke="black" />
+</g>
+
+@code {
+
+    [Parameter]
+    public Link Link { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        Link.Changed += () => StateHasChanged();
+    }
+
+}

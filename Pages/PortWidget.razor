@@ -1,0 +1,42 @@
+﻿@{ System.Diagnostics.Debug.WriteLine("[PortWidget] Rendered"); }
+
+<div @ref="_element" style="width: 20px;
+            height: 20px;
+            background-color: red">
+
+    @Port.Position
+
+</div>
+
+@code {
+
+    [Inject]
+    private IJSRuntime JSRuntime { get; set; }
+
+    [Parameter]
+    public Port Port { get; set; }
+
+    protected ElementReference _element;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        Port.Changed += () => StateHasChanged();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            var leftTopOffsets = await JSRuntime.InvokeAsync<double[]>("getOffset", _element);
+            Port.Offset = (leftTopOffsets[0], leftTopOffsets[1]);
+            Port.Position = (Port.Position.left + Port.Offset.left, Port.Position.top + Port.Offset.top);
+            Port.Refresh();
+            Port.Link.Refresh();
+        }
+    }
+
+}

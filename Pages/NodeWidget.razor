@@ -1,0 +1,19 @@
+﻿@inherits NodeWidgetComponent
+
+@{ System.Diagnostics.Debug.WriteLine("Rendered " + Node.Id); }
+
+
+<div @ref="_element"
+     @onmousedown="OnMouseDown"
+     style="width: 100px;
+            height: 100px;
+            color: white;
+            background-color: black;
+            position: absolute;
+            top: @(Node.Position.top)px;
+            left: @(Node.Position.left)px;">
+    Test
+
+   <PortWidget Port="Node.Port" />
+
+</div>
